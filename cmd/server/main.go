@@ -26,6 +26,11 @@ func main() {
 			Value: "/var/lib/ocid/sandbox",
 			Usage: "ocid pod sandbox dir",
 		},
+		cli.StringFlag{
+			Name:  "runtime",
+			Value: "/usr/bin/runc",
+			Usage: "OCI runtime path",
+		},
 	}
 
 	app.Action = func(c *cli.Context) error {
@@ -43,7 +48,7 @@ func main() {
 		s := grpc.NewServer()
 
 		sandboxDir := c.String("sandboxdir")
-		service, err := server.New("", sandboxDir)
+		service, err := server.New(c.String("runtime"), sandboxDir)
 		if err != nil {
 			log.Fatal(err)
 		}
